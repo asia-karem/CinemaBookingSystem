@@ -1,0 +1,78 @@
+﻿@model CinemaBookingSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Book Tickets";
+}
+
+<div class="container py-5" style="max-width: 700px;">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-4 p-md-5">
+            <h2 class="fw-bold mb-2">Book Your Tickets</h2>
+            <p class="text-secondary mb-4">
+                Enter your details to reserve your seats.
+            </p>
+
+            <form asp-action="Create" method="post">
+                @Html.AntiForgeryToken()
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="mb-3">
+                    <label asp-for="CustomerName"
+                           class="form-label">Full Name</label>
+                    <input asp-for="CustomerName"
+                           class="form-control" />
+                    <span asp-validation-for="CustomerName"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Email"
+                           class="form-label">Email</label>
+                    <input asp-for="Email"
+                           class="form-control" />
+                    <span asp-validation-for="Email"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ShowtimeId"
+                           class="form-label">Movie & Showtime</label>
+                    <select asp-for="ShowtimeId"
+                            asp-items="ViewBag.Showtimes"
+                            class="form-select">
+                        <option value="">-- Select a showtime --</option>
+                    </select>
+                    <span asp-validation-for="ShowtimeId"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-4">
+                    <label asp-for="NumberOfTickets"
+                           class="form-label">Number of Tickets</label>
+                    <input asp-for="NumberOfTickets"
+                           type="number" min="1" max="10"
+                           class="form-control" />
+                    <span asp-validation-for="NumberOfTickets"
+                          class="text-danger"></span>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-warning btn-lg w-100">
+                    Confirm Booking
+                </button>
+
+                <a asp-controller="Movies"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary w-100 mt-2">
+                    Back to Movies
+                </a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

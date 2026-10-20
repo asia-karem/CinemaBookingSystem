@@ -1,0 +1,257 @@
+﻿@model IEnumerable<CinemaBookingSystem.Models.Movie>
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<link rel="stylesheet"
+      href="~/css/dashboard.css"
+      asp-append-version="true" />
+
+<div class="dashboard-page">
+
+    <!-- ================= SIDEBAR ================= -->
+    <aside class="dashboard-sidebar">
+        <div class="dashboard-logo">
+            <div class="logo-icon">🎬</div>
+            CINEMA<span class="logo-accent">+</span>
+        </div>
+
+        <div class="sidebar-menu">
+            <p class="sidebar-label">MAIN MENU</p>
+
+            <a asp-controller="Dashboard" asp-action="Index"
+               class="dashboard-link active">
+                <i class="icon">▦</i> <span>Dashboard</span>
+            </a>
+
+            <a asp-controller="Movies" asp-action="Index"
+               class="dashboard-link">
+                <i class="icon">🎥</i> <span>Movies</span>
+            </a>
+
+            <a asp-controller="Cinemas" asp-action="Index"
+               class="dashboard-link">
+                <i class="icon">🏢</i> <span>Cinemas</span>
+            </a>
+
+            <a asp-controller="Categories" asp-action="Index"
+               class="dashboard-link">
+                <i class="icon">🎭</i> <span>Categories</span>
+            </a>
+
+            <a asp-controller="Bookings" asp-action="Index"
+               class="dashboard-link">
+                <i class="icon">🎟️</i> <span>Bookings</span>
+            </a>
+
+            <p class="sidebar-label mt-4">SHORTCUTS</p>
+
+            <a asp-controller="Home" asp-action="Index" target="_blank"
+               class="dashboard-link">
+                <i class="icon">🌐</i> <span>Visit Website</span>
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="admin-badge">
+                <div class="status-indicator"></div>
+                <div>
+                    <strong>ADMIN PANEL</strong>
+                    <small>v2.4 • Cinema System</small>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="dashboard-main">
+
+        <!-- HEADER -->
+        <header class="dashboard-header">
+            <div>
+                <span class="dashboard-eyebrow">OVERVIEW & STATS</span>
+                <h1>Dashboard</h1>
+                <p class="dashboard-subtitle">
+                    Welcome back! Here's what's happening in your cinema today.
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <a asp-controller="Movies" asp-action="Create"
+                   class="dashboard-add-button btn-primary">
+                    <span class="btn-icon">+</span> Add New Movie
+                </a>
+            </div>
+        </header>
+
+        <!-- STATS CARDS GRID -->
+        <section class="dashboard-stats">
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-movies">🎬</div>
+                    <span class="stat-trend positive">+12%</span>
+                </div>
+                <div class="stat-body">
+                    <p>Total Movies</p>
+                    <h2>@(ViewBag.MoviesCount ?? 0)</h2>
+                </div>
+                <div class="stat-footer">Movies active in library</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-cinemas">🏢</div>
+                </div>
+                <div class="stat-body">
+                    <p>Total Cinemas</p>
+                    <h2>@(ViewBag.CinemasCount ?? 0)</h2>
+                </div>
+                <div class="stat-footer">Locations connected</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-categories">🎭</div>
+                </div>
+                <div class="stat-body">
+                    <p>Categories</p>
+                    <h2>@(ViewBag.CategoriesCount ?? 0)</h2>
+                </div>
+                <div class="stat-footer">Genres available</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-header">
+                    <div class="stat-icon icon-showtimes">🕒</div>
+                </div>
+                <div class="stat-body">
+                    <p>Showtimes</p>
+                    <h2>@(ViewBag.ShowtimesCount ?? 0)</h2>
+                </div>
+                <div class="stat-footer">Active screenings</div>
+            </div>
+
+            <div class="stat-card highlight">
+                <div class="stat-header">
+                    <div class="stat-icon icon-bookings">🎟️</div>
+                    <span class="stat-badge">Top</span>
+                </div>
+                <div class="stat-body">
+                    <p>Total Bookings</p>
+                    <h2>@(ViewBag.BookingsCount ?? 0)</h2>
+                </div>
+                <div class="stat-footer">Recorded reservations</div>
+            </div>
+
+        </section>
+
+        <!-- RECENT MOVIES PANEL -->
+        <section class="dashboard-panel">
+            <div class="panel-heading">
+                <div>
+                    <span class="dashboard-eyebrow">YOUR COLLECTION</span>
+                    <h2>Latest Added Movies</h2>
+                </div>
+
+                <a asp-controller="Movies" asp-action="Index" class="panel-link">
+                    View All Movies <span>→</span>
+                </a>
+            </div>
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="dashboard-table-wrapper">
+                    <table class="dashboard-table">
+                        <thead>
+                            <tr>
+                                <th>Movie</th>
+                                <th>Category</th>
+                                <th>Cinema Location</th>
+                                <th>Price</th>
+                                <th>Status</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var movie in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="movie-table-name">
+                                            <div class="poster-container">
+                                                <img src="@movie.MainImg"
+                                                     alt="@movie.Name"
+                                                     loading="lazy"
+                                                     onerror="this.onerror=null; this.src='/images/placeholder-poster.png';" />
+                                            </div>
+                                            <div class="movie-info">
+                                                <strong>@movie.Name</strong>
+                                                <small>ID: #@movie.Id</small>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <span class="badge-category">
+                                            @(movie.Category?.Name ?? "Unassigned")
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="cinema-location">
+                                            <span>📍</span> @(movie.Cinema?.Name ?? "N/A")
+                                        </div>
+                                    </td>
+
+                                    <td class="movie-price">
+                                        <strong>$@movie.Price.ToString("F2")</strong>
+                                    </td>
+
+                                    <td>
+                                        <span class="status-pill status-active">
+                                            <span class="dot"></span> Now Showing
+                                        </span>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <div class="table-actions">
+                                            <a asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id"
+                                               class="action-btn edit" title="Edit Movie">
+                                                ✏️
+                                            </a>
+                                            <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id"
+                                               class="action-btn details" title="View Details">
+                                                👁️
+                                            </a>
+                                            <a asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id"
+                                               class="action-btn delete" title="Delete Movie">
+                                                🗑️
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="dashboard-empty">
+                    <div class="empty-icon">🎬</div>
+                    <h3>No Movies Found</h3>
+                    <p>Your library is empty. Start adding movies to feature them on the website.</p>
+
+                    <a asp-controller="Movies" asp-action="Create"
+                       class="dashboard-add-button btn-primary">
+                        + Add First Movie
+                    </a>
+                </div>
+            }
+        </section>
+
+    </main>
+</div>

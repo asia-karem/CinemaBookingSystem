@@ -1,0 +1,283 @@
+﻿@model IEnumerable<CinemaBookingSystem.Models.Movie>
+
+@{
+    ViewData["Title"] = "Home - Cinema+ Experience";
+}
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+
+<div class="cinema-home">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="hero-backdrop"></div>
+
+        <div class="hero-overlay">
+            <div class="hero-content">
+
+                <span class="hero-label">
+                    <span class="pulse-dot"></span>
+                    WELCOME TO CINEMA+ VIP
+                </span>
+
+                <h1>
+                    YOUR NEXT<br />
+                    <span>CINEMATIC ADVENTURE.</span>
+                </h1>
+
+                <p>
+                    Discover incredible blockbuster stories,
+                    explore your favorite movies, and enjoy
+                    an unforgettable cinema experience.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="#featured-movies" class="gold-button">
+                        <span>Explore Movies</span>
+                        <span class="arrow">→</span>
+                    </a>
+
+                    <a href="#why-cinema" class="outline-button">
+                        The Experience
+                    </a>
+                </div>
+
+                <div class="hero-features">
+                    <div class="feature-item">
+                        <strong>4K / IMAX</strong>
+                        <span>Ultra-HD Screens</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <strong>DOLBY</strong>
+                        <span>Atmos Audio System</span>
+                    </div>
+
+                    <div class="feature-item">
+                        <strong>VIP</strong>
+                        <span>Premium Experience</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED MOVIES -->
+    <section class="featured-section" id="featured-movies">
+
+        <div class="section-heading">
+            <div>
+                <span class="section-label">
+                    <span class="pulse-dot"></span>
+                    NOW SHOWING IN THEATERS
+                </span>
+
+                <h2>Featured <span>Movies</span></h2>
+
+                <p>
+                    Pick your favorite movie and discover
+                    your next cinematic adventure.
+                </p>
+            </div>
+
+            <a asp-controller="Movies"
+               asp-action="Index"
+               class="view-all-link">
+                Browse All Movies <span class="arrow">→</span>
+            </a>
+        </div>
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="movie-grid">
+
+                @foreach (var movie in Model)
+                {
+                    <article class="movie-card">
+
+                        <div class="movie-poster">
+
+                            <img src="@movie.MainImg"
+                                 alt="@movie.Name"
+                                 loading="lazy"
+                                 onerror="this.onerror=null;this.src='/images/placeholder-poster.png';" />
+
+                            <span class="movie-category-tag">
+                                @(movie.Category?.Name ?? "Movie")
+                            </span>
+
+                            <div class="poster-overlay">
+
+                                <div class="overlay-movie-info">
+                                    <h3>@movie.Name</h3>
+
+                                    <p class="movie-desc">
+                                        @(string.IsNullOrWhiteSpace(movie.Des)
+                                            ? "Discover this movie and enjoy the experience."
+                                            : movie.Des)
+                                    </p>
+                                </div>
+
+                                <div class="overlay-actions">
+
+                                    <a asp-controller="Movies"
+                                       asp-action="Details"
+                                       asp-route-id="@movie.Id"
+                                       class="card-btn btn-details">
+                                        Details
+                                    </a>
+
+                                    <a asp-controller="Bookings"
+                                       asp-action="Create"
+                                       asp-route-movieId="@movie.Id"
+                                       class="card-btn btn-book">
+                                        Book Now <span>🎟</span>
+                                    </a>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="movie-card-info">
+
+                            <div class="movie-meta">
+                                <h3>@movie.Name</h3>
+
+                                <div class="cinema-name">
+                                    <span>📍</span>
+                                    <span>
+                                        @(movie.Cinema?.Name
+                                            ?? "Cinema Location")
+                                    </span>
+                                </div>
+
+                                <div class="movie-genre">
+                                    @(movie.Category?.Name ?? "Uncategorized")
+                                </div>
+                            </div>
+
+                            <div class="movie-price-tag">
+                                <small>Ticket Price</small>
+
+                                <span class="price-amount">
+                                    @movie.Price.ToString("0.00")
+                                </span>
+                            </div>
+
+                        </div>
+                    </article>
+                }
+
+            </div>
+        }
+        else
+        {
+            <div class="empty-movies">
+                <div class="empty-icon">🎬</div>
+
+                <h3>Your Next Favorite Movie Is Coming Soon!</h3>
+
+                <p>
+                    We are updating our movie collection.
+                    Check back soon for new releases.
+                </p>
+
+                <a asp-controller="Movies"
+                   asp-action="Index"
+                   class="gold-button btn-lg">
+                    Explore All Movies →
+                </a>
+            </div>
+        }
+
+    </section>
+
+    <!-- WHY CHOOSE CINEMA+ -->
+    <section class="why-section" id="why-cinema">
+
+        <div class="why-heading">
+            <span class="section-label">
+                THE CINEMA+ DIFFERENCE
+            </span>
+
+            <h2>More Than Just <span>A Movie</span></h2>
+
+            <p>
+                Discover an entertainment experience
+                designed for movie lovers.
+            </p>
+        </div>
+
+        <div class="benefit-grid">
+
+            <div class="benefit-card">
+                <div class="benefit-icon-wrapper">
+                    <span class="benefit-icon">🎞️</span>
+                </div>
+
+                <h3>Amazing Movies</h3>
+
+                <p>
+                    Explore movies from different genres
+                    and discover unforgettable stories.
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-icon-wrapper">
+                    <span class="benefit-icon">🍿</span>
+                </div>
+
+                <h3>Premium Experience</h3>
+
+                <p>
+                    Enjoy your movie night with a stylish
+                    and comfortable cinema experience.
+                </p>
+            </div>
+
+            <div class="benefit-card">
+                <div class="benefit-icon-wrapper">
+                    <span class="benefit-icon">🎟️</span>
+                </div>
+
+                <h3>Easy Booking</h3>
+
+                <p>
+                    Explore available movies and continue
+                    to the booking page to plan your visit.
+                </p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- CALL TO ACTION -->
+    <section class="booking-banner">
+
+        <div class="banner-content">
+            <span class="section-label">
+                YOUR NEXT MOVIE NIGHT STARTS HERE
+            </span>
+
+            <h2>
+                Ready For The <span>Big Screen?</span>
+            </h2>
+
+            <p>
+                Choose your favorite movie and get ready
+                for your next cinematic adventure.
+            </p>
+        </div>
+
+        <a asp-controller="Movies"
+           asp-action="Index"
+           class="gold-button btn-lg">
+            <span>Explore Movies</span>
+            <span class="arrow">→</span>
+        </a>
+
+    </section>
+
+</div>

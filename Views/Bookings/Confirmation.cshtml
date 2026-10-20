@@ -1,0 +1,50 @@
+﻿@model CinemaBookingSystem.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Confirmation";
+}
+
+<div class="container py-5" style="max-width: 700px;">
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-5 text-center">
+            <div class="text-success mb-3">
+                <span style="font-size: 56px;">✓</span>
+            </div>
+
+            <h2 class="fw-bold">Booking Successful!</h2>
+            <p class="text-secondary">
+                Thank you, @Model.CustomerName.
+            </p>
+
+            <hr />
+
+            <p>
+                <strong>Movie:</strong>
+                @(Model.Showtime?.Movie?.Name ?? "N/A")
+            </p>
+
+            <p>
+                <strong>Showtime:</strong>
+                @Model.Showtime?.StartTime.ToString("dd MMM yyyy, hh:mm tt")
+            </p>
+
+            <p>
+                <strong>Tickets:</strong> @Model.NumberOfTickets
+            </p>
+
+            <h3 class="text-warning my-4">
+                Total: @Model.TotalPrice.ToString("0.00")
+            </h3>
+
+            <p>
+                <strong>Status:</strong> @Model.Status
+            </p>
+
+            <a asp-controller="Movies"
+               asp-action="Index"
+               class="btn btn-dark">
+                Back to Movies
+            </a>
+        </div>
+    </div>
+</div>

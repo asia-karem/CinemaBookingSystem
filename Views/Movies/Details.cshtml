@@ -1,0 +1,108 @@
+﻿@model CinemaBookingSystem.Models.Movie
+
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="container py-5">
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary mb-4">
+        &larr; Back to Movies
+    </a>
+
+    <div class="card border-0 shadow rounded-4 overflow-hidden">
+        <div class="row g-0">
+
+            <div class="col-md-5">
+                @if (!string.IsNullOrEmpty(Model.MainImg))
+                {
+                    <img src="@Model.MainImg"
+                         alt="@Model.Name"
+                         class="w-100 h-100"
+                         style="min-height:400px; max-height:650px; object-fit:cover;" />
+                }
+            </div>
+
+            <div class="col-md-7">
+                <div class="card-body p-4 p-lg-5">
+
+                    <span class="badge bg-warning text-dark mb-3">
+                        @(Model.Category?.Name ?? "Movie")
+                    </span>
+
+                    <h1 class="fw-bold mb-3">@Model.Name</h1>
+
+                    <p class="text-secondary">
+                        @Model.Des
+                    </p>
+
+                    <hr />
+
+                    <p>
+                        <strong>Cinema:</strong>
+                        @(Model.Cinema?.Name ?? "N/A")
+                    </p>
+
+                    <p>
+                        <strong>Release Date:</strong>
+                        @Model.DateTime.ToString("dd MMM yyyy")
+                    </p>
+
+                    <p>
+                        <strong>Status:</strong>
+                        @Model.Status
+                    </p>
+
+                    <h3 class="text-warning my-4">
+                        @Model.Price.ToString("0.00")
+                    </h3>
+
+                    @if (Model.SubImages != null && Model.SubImages.Any())
+                    {
+                        <h5 class="mb-3">More Images</h5>
+
+                        <div class="d-flex flex-wrap gap-3 mb-4">
+                            @foreach (var image in Model.SubImages)
+                            {
+                                <img src="@image.ImageUrl"
+                                     alt="@Model.Name"
+                                     class="rounded"
+                                     style="width:100px;height:130px;object-fit:cover;" />
+                            }
+                        </div>
+                    }
+
+                    <div class="d-flex flex-wrap gap-2 mt-4">
+
+                        @if (Model.Status == "Active")
+                        {
+                            <a asp-controller="Bookings"
+                               asp-action="Create"
+                               class="btn btn-warning btn-lg">
+                                <i class="bi bi-ticket-perforated"></i>
+                                Book Now
+                            </a>
+                        }
+                        else
+                        {
+                            <button type="button"
+                                    class="btn btn-secondary btn-lg"
+                                    disabled>
+                                Booking Unavailable
+                            </button>
+                        }
+
+                        <a asp-action="Index"
+                           class="btn btn-outline-secondary btn-lg">
+                            Back to Movies
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

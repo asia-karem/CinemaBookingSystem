@@ -1,0 +1,187 @@
+﻿@model IEnumerable<CinemaBookingSystem.Models.Movie>
+
+@{
+    ViewData["Title"] = "Movies";
+}
+
+<style>
+    .movie-card {
+        background: #171717;
+        color: #fff;
+        border: 1px solid #333;
+        border-radius: 16px;
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+        .movie-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+        }
+
+    .movie-poster {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        background: #292929;
+    }
+
+    .movie-description {
+        color: #bdbdbd;
+        min-height: 72px;
+    }
+
+    .movie-label {
+        color: #aaa;
+    }
+
+    .movie-price {
+        color: #ffc107;
+        font-size: 1.15rem;
+        font-weight: bold;
+    }
+
+    .movie-gallery {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding: 10px 0;
+    }
+
+        .movie-gallery img {
+            width: 65px;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+    .movie-details-btn {
+        border: 1px solid #ffc107;
+        color: #ffc107;
+        transition: 0.2s;
+    }
+
+        .movie-details-btn:hover {
+            background: #ffc107;
+            color: #171717;
+        }
+</style>
+
+<div class="container py-5">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
+        <div>
+            <p class="text-warning mb-2">CINEMA MANAGEMENT</p>
+            <h1 class="fw-bold">Movies</h1>
+            <p class="text-secondary">
+                Explore and manage all movies.
+            </p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-warning fw-bold px-4">
+            + Add Movie
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-dark border">
+            No movies found. Add your first movie!
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var movie in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card movie-card h-100 overflow-hidden">
+
+                        @if (!string.IsNullOrEmpty(movie.MainImg))
+                        {
+                            <img src="@movie.MainImg"
+                                 alt="@movie.Name"
+                                 class="movie-poster" />
+                        }
+                        else
+                        {
+                            <div class="movie-poster d-flex align-items-center justify-content-center">
+                                <span class="text-secondary">
+                                    No Image Available
+                                </span>
+                            </div>
+                        }
+
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+                                <h4 class="fw-bold mb-0">@movie.Name</h4>
+
+                                <span class="badge @(movie.Status == "Active" ? "bg-success" : "bg-secondary")">
+                                    @movie.Status
+                                </span>
+                            </div>
+
+                            <p class="movie-description">
+                                @((movie.Des ?? "").Length > 120
+                                    ? movie.Des.Substring(0, 120) + "..."
+                                    : movie.Des)
+                            </p>
+
+                            <hr class="border-secondary" />
+
+                            <p>
+                                <span class="movie-label">Category:</span>
+                                <strong>@(movie.Category?.Name ?? "N/A")</strong>
+                            </p>
+
+                            <p>
+                                <span class="movie-label">Cinema:</span>
+                                <strong>@(movie.Cinema?.Name ?? "N/A")</strong>
+                            </p>
+
+                            <p class="movie-price mb-3">
+                                Ticket Price: @movie.Price.ToString("0.00")
+                            </p>
+
+                            <p class="small text-secondary">
+                                <strong>Release Date:</strong><br />
+                                @movie.DateTime.ToString("dd MMM yyyy hh:mm tt")
+                            </p>
+
+                            @if (movie.SubImages != null && movie.SubImages.Any())
+                            {
+                                <hr class="border-secondary" />
+
+                                <p class="small text-secondary mb-1">
+                                    Additional Images
+                                </p>
+
+                                <div class="movie-gallery">
+                                    @foreach (var image in movie.SubImages)
+                                    {
+                                        <img src="@image.ImageUrl"
+                                             alt="@movie.Name" />
+                                    }
+                                </div>
+                            }
+
+                            <a asp-action="Details"
+                               asp-route-id="@movie.Id"
+                               class="btn movie-details-btn w-100 mt-3">
+                                View Details
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

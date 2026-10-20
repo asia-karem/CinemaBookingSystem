@@ -1,0 +1,81 @@
+﻿@model CinemaBookingSystem.Models.Cinema
+
+@{
+    ViewData["Title"] = "Edit Cinema";
+}
+
+<div class="container py-5">
+    <h1 class="mb-2">Edit Cinema</h1>
+    <p class="text-secondary mb-4">Update cinema information.</p>
+
+    <div class="card p-4" style="max-width: 700px;">
+        <form asp-action="Edit"
+              asp-route-id="@Model.Id"
+              method="post"
+              enctype="multipart/form-data">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description"
+                          class="form-control"
+                          rows="4"></textarea>
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Img))
+            {
+                <div class="mb-3">
+                    <label class="form-label">Current Image</label>
+                    <img src="@Model.Img"
+                         alt="@Model.Name"
+                         style="width:200px;height:120px;object-fit:cover;"
+                         class="d-block rounded mb-2" />
+                </div>
+            }
+
+            <div class="mb-4">
+                <label for="imageFile" class="form-label">
+                    Change Image (optional)
+                </label>
+                <input type="file"
+                       id="imageFile"
+                       name="imageFile"
+                       class="form-control"
+                       accept="image/*" />
+                @Html.ValidationMessage("imageFile",
+                    "", new { @class = "text-danger" })
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                Save Changes
+            </button>
+
+            <a asp-action="Index" class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
