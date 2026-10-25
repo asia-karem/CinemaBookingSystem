@@ -15,12 +15,25 @@ namespace CinemaBookingSystem.Controllers
 
         public async Task<IActionResult> Index()
         {
+            // Get the latest 8 movies
             var movies = await _context.Movies
                 .Include(m => m.Category)
                 .Include(m => m.Cinema)
                 .OrderByDescending(m => m.Id)
                 .Take(8)
                 .ToListAsync();
+
+            // Dashboard statistics
+            ViewBag.TotalMovies = await _context.Movies.CountAsync();
+
+            ViewBag.TotalCinemas = await _context.Cinemas.CountAsync();
+
+            ViewBag.TotalShowtimes = await _context.Showtimes.CountAsync();
+
+            ViewBag.TotalBookings = await _context.Bookings.CountAsync();
+
+            ViewBag.TotalRevenue = await _context.Bookings
+                .SumAsync(b => (decimal?)b.TotalPrice) ?? 0m;
 
             return View(movies);
         }

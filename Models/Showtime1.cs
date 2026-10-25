@@ -4,5 +4,6 @@
     {
         public int MovieId { get; internal set; }
         public DateTime StartTime { get; internal set; }
+        public int AvailableSeats { get; internal set; }
     }
 }

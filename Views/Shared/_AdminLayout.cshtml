@@ -1,0 +1,26 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Cinema+ Admin</title>
+
+    <link rel="stylesheet"
+          href="~/falcon/assets/css/theme.css" />
+    <link rel="stylesheet"
+          href="~/falcon/assets/css/user.css" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+    <main>
+        @RenderBody()
+    </main>
+
+    <script src="~/falcon/assets/js/config.js"></script>
+    <script src="~/falcon/assets/js/theme.js"></script>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

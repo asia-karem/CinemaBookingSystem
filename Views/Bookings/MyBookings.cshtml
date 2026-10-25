@@ -1,0 +1,110 @@
+﻿@model IEnumerable<CinemaBookingSystem.Models.Booking>
+
+@{
+    ViewData["Title"] = "My Bookings";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">My Bookings</h2>
+            <p class="text-muted">
+                View your cinema ticket reservations.
+            </p>
+        </div>
+
+        <a asp-controller="Movies"
+           asp-action="Index"
+           class="btn btn-dark">
+            Browse Movies
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            You haven't made any bookings yet.
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Movie</th>
+                        <th>Showtime</th>
+                        <th>Tickets</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Booking Date</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var booking in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>
+                                    @(booking.Showtime?.Movie?.Name ?? "N/A")
+                                </strong>
+                            </td>
+
+                            <td>
+                                @(booking.Showtime == null
+                                    ? "N/A"
+                                    : booking.Showtime.StartTime.ToString(
+                                        "dd MMM yyyy, hh:mm tt"))
+                            </td>
+
+                            <td>@booking.NumberOfTickets</td>
+
+                            <td>
+                                @booking.TotalPrice.ToString("0.00")
+                            </td>
+
+                            <td>
+                                <span class="badge
+                                    @(booking.Status == "Confirmed"
+    ? "bg-success"
+    : booking.Status == "Cancelled"
+        ? "bg-danger"
+        : "bg-secondary")">
+                                    @booking.Status
+                                </span>
+                            </td>
+
+                            <td>
+                                @booking.BookingDate
+                                .ToLocalTime()
+                                .ToString("dd MMM yyyy")
+                            </td>
+
+                            <td>
+                                <a asp-controller="Bookings"
+                                   asp-action="Confirmation"
+                                   asp-route-id="@booking.Id"
+                                   class="btn btn-sm btn-outline-dark">
+                                    View
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

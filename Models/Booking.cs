@@ -1,9 +1,8 @@
 ﻿
-
-
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
 
 namespace CinemaBookingSystem.Models
 {
@@ -34,5 +33,10 @@ namespace CinemaBookingSystem.Models
         public int ShowtimeId { get; set; }
 
         public Showtime? Showtime { get; set; }
+
+        // Identity user who made the booking
+        public string? UserId { get; set; }
+
+        public IdentityUser? User { get; set; }
     }
 }

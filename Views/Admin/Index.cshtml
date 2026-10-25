@@ -1,0 +1,69 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Cinema+ Dashboard</h2>
+            <p class="text-muted mb-0">Welcome to your admin panel</p>
+        </div>
+        <a href="/Home/Index" class="btn btn-outline-secondary">
+            View Website
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-2">Total Movies</p>
+                    <h3>@ViewBag.TotalMovies</h3>
+                    <a href="/Movies/Index">Manage Movies →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-2">Total Cinemas</p>
+                    <h3>@ViewBag.TotalCinemas</h3>
+                    <a href="/Cinemas/Index">Manage Cinemas →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-2">Total Showtimes</p>
+                    <h3>@ViewBag.TotalShowtimes</h3>
+                    <a href="/Showtimes/Index">Manage Showtimes →</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <p class="text-muted mb-2">Total Bookings</p>
+                    <h3>@ViewBag.TotalBookings</h3>
+                    <a href="/Bookings/Index">Manage Bookings →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>Total Revenue</h5>
+            <h2 class="mt-3">
+                @(((decimal)ViewBag.TotalRevenue).ToString("N2"))
+                <small class="text-muted fs-6">EGP</small>
+            </h2>
+        </div>
+    </div>
+</div>
+

@@ -1,65 +1,102 @@
 ﻿@model CinemaBookingSystem.Models.Booking
+@using Microsoft.AspNetCore.Mvc.Rendering
 
 @{
     ViewData["Title"] = "Book Tickets";
+
+    var showtimes = ViewBag.Showtimes as IEnumerable<SelectListItem>
+                    ?? Enumerable.Empty<SelectListItem>();
 }
 
 <div class="container py-5" style="max-width: 700px;">
     <div class="card shadow border-0 rounded-4">
         <div class="card-body p-4 p-md-5">
+
             <h2 class="fw-bold mb-2">Book Your Tickets</h2>
+
             <p class="text-secondary mb-4">
-                Enter your details to reserve your seats.
+                Select a movie and showtime, then enter your booking details.
             </p>
 
-            <form asp-action="Create" method="post">
+            <form asp-controller="Bookings"
+                  asp-action="Create"
+                  method="post">
+
                 @Html.AntiForgeryToken()
 
                 <div asp-validation-summary="ModelOnly"
                      class="text-danger mb-3"></div>
 
                 <div class="mb-3">
-                    <label asp-for="CustomerName"
-                           class="form-label">Full Name</label>
+                    <label asp-for="CustomerName" class="form-label">
+                        Full Name
+                    </label>
+
                     <input asp-for="CustomerName"
-                           class="form-control" />
+                           class="form-control"
+                           placeholder="Enter your full name" />
+
                     <span asp-validation-for="CustomerName"
                           class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Email"
-                           class="form-label">Email</label>
+                    <label asp-for="Email" class="form-label">
+                        Email
+                    </label>
+
                     <input asp-for="Email"
-                           class="form-control" />
+                           type="email"
+                           class="form-control"
+                           placeholder="example@email.com" />
+
                     <span asp-validation-for="Email"
                           class="text-danger"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="ShowtimeId"
-                           class="form-label">Movie & Showtime</label>
+                    <label asp-for="ShowtimeId" class="form-label">
+                        Movie &amp; Showtime
+                    </label>
+
                     <select asp-for="ShowtimeId"
-                            asp-items="ViewBag.Showtimes"
-                            class="form-select">
+                            asp-items="showtimes"
+                            class="form-select"
+                            required>
                         <option value="">-- Select a showtime --</option>
                     </select>
+
                     <span asp-validation-for="ShowtimeId"
                           class="text-danger"></span>
+
+                    @if (!showtimes.Any())
+                    {
+                        <div class="alert alert-warning mt-3 mb-0">
+                            No future showtimes are available.
+                            Please add a future showtime first.
+                        </div>
+                    }
                 </div>
 
                 <div class="mb-4">
-                    <label asp-for="NumberOfTickets"
-                           class="form-label">Number of Tickets</label>
+                    <label asp-for="NumberOfTickets" class="form-label">
+                        Number of Tickets
+                    </label>
+
                     <input asp-for="NumberOfTickets"
-                           type="number" min="1" max="10"
-                           class="form-control" />
+                           type="number"
+                           min="1"
+                           max="10"
+                           class="form-control"
+                           required />
+
                     <span asp-validation-for="NumberOfTickets"
                           class="text-danger"></span>
                 </div>
 
                 <button type="submit"
-                        class="btn btn-warning btn-lg w-100">
+                        class="btn btn-warning btn-lg w-100"
+                        disabled="@(!showtimes.Any())">
                     Confirm Booking
                 </button>
 
@@ -68,6 +105,7 @@
                    class="btn btn-outline-secondary w-100 mt-2">
                     Back to Movies
                 </a>
+
             </form>
         </div>
     </div>

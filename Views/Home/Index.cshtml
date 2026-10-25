@@ -3,8 +3,8 @@
 @{
     ViewData["Title"] = "Home - Cinema+ Experience";
 }
-<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 
+<link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 
 <div class="cinema-home">
 
@@ -60,6 +60,68 @@
                 </div>
 
             </div>
+        </div>
+    </section>
+
+    <!-- DASHBOARD STATISTICS -->
+    <section class="stats-section" id="dashboard-stats">
+
+        <div class="stats-heading">
+            <span class="section-label">
+                <span class="pulse-dot"></span>
+                CINEMA+ OVERVIEW
+            </span>
+
+            <h2>Our Cinema <span>Statistics</span></h2>
+
+            <p>
+                Explore our movies, cinemas, showtimes, and bookings.
+            </p>
+        </div>
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <div class="stat-icon">🎬</div>
+                <div class="stat-info">
+                    <span>Total Movies</span>
+                    <h3>@ViewBag.TotalMovies</h3>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🏢</div>
+                <div class="stat-info">
+                    <span>Total Cinemas</span>
+                    <h3>@ViewBag.TotalCinemas</h3>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🕒</div>
+                <div class="stat-info">
+                    <span>Total Showtimes</span>
+                    <h3>@ViewBag.TotalShowtimes</h3>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon">🎟️</div>
+                <div class="stat-info">
+                    <span>Total Bookings</span>
+                    <h3>@ViewBag.TotalBookings</h3>
+                </div>
+            </div>
+
+            <div class="stat-card revenue-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-info">
+                    <span>Total Booking Value</span>
+                    <h3>@(((decimal)ViewBag.TotalRevenue).ToString("N2"))</h3>
+                    <small>EGP</small>
+                </div>
+            </div>
+
         </div>
     </section>
 
@@ -130,7 +192,6 @@
 
                                     <a asp-controller="Bookings"
                                        asp-action="Create"
-                                       asp-route-movieId="@movie.Id"
                                        class="card-btn btn-book">
                                         Book Now <span>🎟</span>
                                     </a>
@@ -147,8 +208,7 @@
                                 <div class="cinema-name">
                                     <span>📍</span>
                                     <span>
-                                        @(movie.Cinema?.Name
-                                            ?? "Cinema Location")
+                                        @(movie.Cinema?.Name ?? "Cinema Location")
                                     </span>
                                 </div>
 
