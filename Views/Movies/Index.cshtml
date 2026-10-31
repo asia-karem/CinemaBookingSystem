@@ -69,17 +69,24 @@
 <div class="container py-5">
 
     <div class="d-flex flex-wrap justify-content-between align-items-center mb-5 gap-3">
+
         <div>
-            <p class="text-warning mb-2">CINEMA MANAGEMENT</p>
+            <p class="text-warning mb-2">CINEMA</p>
+
             <h1 class="fw-bold">Movies</h1>
+
             <p class="text-secondary">
-                Explore and manage all movies.
+                Explore our available movies and discover your next favorite film.
             </p>
         </div>
 
-        <a asp-action="Create" class="btn btn-warning fw-bold px-4">
-            + Add Movie
-        </a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-warning fw-bold px-4">
+                + Add Movie
+            </a>
+        }
+
     </div>
 
     @if (TempData["Success"] != null)
@@ -89,18 +96,27 @@
         </div>
     }
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+
     @if (Model == null || !Model.Any())
     {
         <div class="alert alert-dark border">
-            No movies found. Add your first movie!
+            No movies available right now.
         </div>
     }
     else
     {
         <div class="row g-4">
+
             @foreach (var movie in Model)
             {
                 <div class="col-md-6 col-lg-4">
+
                     <div class="card movie-card h-100 overflow-hidden">
 
                         @if (!string.IsNullOrEmpty(movie.MainImg))
@@ -121,11 +137,15 @@
                         <div class="card-body p-4">
 
                             <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
-                                <h4 class="fw-bold mb-0">@movie.Name</h4>
+
+                                <h4 class="fw-bold mb-0">
+                                    @movie.Name
+                                </h4>
 
                                 <span class="badge @(movie.Status == "Active" ? "bg-success" : "bg-secondary")">
                                     @movie.Status
                                 </span>
+
                             </div>
 
                             <p class="movie-description">
@@ -184,4 +204,5 @@
             }
         </div>
     }
+
 </div>

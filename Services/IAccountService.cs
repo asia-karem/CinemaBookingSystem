@@ -14,5 +14,6 @@ namespace CinemaBookingSystem.Services
             string password);
 
         Task LogoutAsync();
+        Task RegisterAsync(string email, object password);
     }
 }

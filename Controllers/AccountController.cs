@@ -1,5 +1,4 @@
-﻿
-using CinemaBookingSystem.Services;
+﻿using CinemaBookingSystem.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -17,6 +16,9 @@ namespace CinemaBookingSystem.Controllers
         [HttpGet]
         public IActionResult Register()
         {
+            if (User.Identity?.IsAuthenticated == true)
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
@@ -24,12 +26,16 @@ namespace CinemaBookingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            if (User.Identity?.IsAuthenticated == true)
+                return RedirectToAction("Index", "Home");
+
             if (!ModelState.IsValid)
                 return View(model);
 
             var result = await _accountService.RegisterAsync(
                 model.Email,
-                model.Password);
+                model.Password
+            );
 
             if (result.Succeeded)
             {
@@ -38,7 +44,9 @@ namespace CinemaBookingSystem.Controllers
             }
 
             foreach (var error in result.Errors)
+            {
                 ModelState.AddModelError(string.Empty, error.Description);
+            }
 
             return View(model);
         }
@@ -46,36 +54,51 @@ namespace CinemaBookingSystem.Controllers
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            return View(new LoginViewModel { ReturnUrl = returnUrl });
+            if (User.Identity?.IsAuthenticated == true)
+                return RedirectToAction("Index", "Home");
+
+            var model = new LoginViewModel
+            {
+                RedirectUrl = returnUrl
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            if (User.Identity?.IsAuthenticated == true)
+                return RedirectToAction("Index", "Home");
+
             if (!ModelState.IsValid)
                 return View(model);
 
             var success = await _accountService.LoginAsync(
                 model.Email,
-                model.Password);
+                model.Password
+            );
 
-            if (success)
+            if (!success)
             {
-                if (!string.IsNullOrWhiteSpace(model.ReturnUrl) &&
-                    Url.IsLocalUrl(model.ReturnUrl))
-                {
-                    return Redirect(model.ReturnUrl);
-                }
+                ModelState.AddModelError(
+                    string.Empty,
+                    "Invalid email or password."
+                );
 
-                return RedirectToAction("Index", "Home");
+                return View(model);
             }
 
-            ModelState.AddModelError(
-                string.Empty,
-                "Invalid email or password.");
+            TempData["Success"] = "Welcome back!";
 
-            return View(model);
+            if (!string.IsNullOrWhiteSpace(model.RedirectUrl) &&
+                Url.IsLocalUrl(model.RedirectUrl))
+            {
+                return Redirect(model.RedirectUrl);
+            }
+
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -83,9 +106,13 @@ namespace CinemaBookingSystem.Controllers
         public async Task<IActionResult> Logout()
         {
             await _accountService.LogoutAsync();
+
+            TempData["Success"] = "You have logged out successfully.";
+
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
         public IActionResult AccessDenied()
         {
             return View();
@@ -119,6 +146,6 @@ namespace CinemaBookingSystem.Controllers
         [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
-        public string? ReturnUrl { get; set; }
+        public string? RedirectUrl { get; set; }
     }
 }

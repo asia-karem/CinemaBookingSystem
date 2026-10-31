@@ -32,13 +32,15 @@
                         @Html.AntiForgeryToken()
 
                         <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3"></div>
+                             class="text-danger mb-3">
+                        </div>
 
-                        <input asp-for="ReturnUrl" type="hidden" />
+                        <input asp-for="RedirectUrl" type="hidden" />
 
                         <div class="mb-3">
-                            <label asp-for="Email"
-                                   class="form-label">Email Address</label>
+                            <label asp-for="Email" class="form-label">
+                                Email Address
+                            </label>
 
                             <input asp-for="Email"
                                    class="form-control form-control-lg"
@@ -49,10 +51,12 @@
                         </div>
 
                         <div class="mb-4">
-                            <label asp-for="Password"
-                                   class="form-label">Password</label>
+                            <label asp-for="Password" class="form-label">
+                                Password
+                            </label>
 
                             <input asp-for="Password"
+                                   type="password"
                                    class="form-control form-control-lg"
                                    placeholder="Enter your password" />
 
@@ -68,7 +72,10 @@
                     </form>
 
                     <div class="text-center mt-4">
-                        <span class="text-muted">Don't have an account?</span>
+                        <span class="text-muted">
+                            Don't have an account?
+                        </span>
+
                         <a asp-controller="Account"
                            asp-action="Register"
                            class="fw-bold text-decoration-none">

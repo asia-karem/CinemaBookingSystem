@@ -1,111 +1,93 @@
-﻿@model CinemaBookingSystem.Models.Showtime
+﻿
+@model CinemaBookingSystem.Models.Showtime
 
 @{
-    ViewData["Title"] = "Add Showtime";
-    var noMovies = ViewBag.NoMovies == true;
+    ViewData["Title"] = "Add Movie Showtime";
+
+    var minDateTime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm");
+    var defaultDateTime = DateTime.Now.AddHours(1).ToString("yyyy-MM-ddTHH:mm");
 }
 
+<link rel="stylesheet" href="~/css/movie-create.css" asp-append-version="true" />
+
 <div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-md-7 col-lg-6">
-            <div class="card bg-dark text-light shadow-lg border-secondary">
-                <div class="card-body p-4">
+    <div class="movie-form-container">
 
-                    <h1 class="h3 mb-2">Add Movie Showtime</h1>
-
-                    <p class="text-secondary mb-4">
-                        Choose a movie and schedule its screening.
-                    </p>
-
-                    <form asp-controller="Showtimes"
-                          asp-action="Create"
-                          method="post">
-
-                        @Html.AntiForgeryToken()
-
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3"></div>
-
-                        @if (noMovies)
-                        {
-                            <div class="alert alert-warning">
-                                No movies found. Add a movie before creating a showtime.
-
-                                <a asp-controller="Movies"
-                                   asp-action="Create"
-                                   class="alert-link">
-                                    Add Movie
-                                </a>
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="mb-3">
-                                <label asp-for="MovieId"
-                                       class="form-label">
-                                    Select Movie
-                                </label>
-
-                                <select asp-for="MovieId"
-                                        asp-items="ViewBag.Movies"
-                                        class="form-select bg-dark text-light border-secondary">
-                                    <option value="">-- Select a movie --</option>
-                                </select>
-
-                                <span asp-validation-for="MovieId"
-                                      class="text-danger"></span>
-                            </div>
-                        }
-
-                        <div class="mb-3">
-                            <label asp-for="StartTime"
-                                   class="form-label">
-                                Start Date and Time
-                            </label>
-
-                            <input asp-for="StartTime"
-                                   type="datetime-local"
-                                   asp-format="{0:yyyy-MM-ddTHH:mm}"
-                                   class="form-control bg-dark text-light border-secondary"
-                                   step="60" />
-
-                            <span asp-validation-for="StartTime"
-                                  class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-4">
-                            <label asp-for="AvailableSeats"
-                                   class="form-label">
-                                Available Seats
-                            </label>
-
-                            <input asp-for="AvailableSeats"
-                                   type="number"
-                                   min="1"
-                                   max="500"
-                                   class="form-control bg-dark text-light border-secondary" />
-
-                            <span asp-validation-for="AvailableSeats"
-                                  class="text-danger"></span>
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button type="submit"
-                                    class="btn btn-primary"
-                                    disabled="@noMovies">
-                                Save Showtime
-                            </button>
-
-                            <a asp-action="Index"
-                               class="btn btn-outline-light">
-                                Cancel
-                            </a>
-                        </div>
-
-                    </form>
-                </div>
-            </div>
+        <div class="form-header text-center mb-4">
+            <h2>🎬 Add Movie Showtime</h2>
+            <p>Choose a movie and schedule its screening.</p>
         </div>
+
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger"></div>
+
+            <div class="mb-4">
+                <label asp-for="MovieId" class="form-label">
+                    Select Movie
+                </label>
+
+                <select asp-for="MovieId"
+                        asp-items="ViewBag.MovieId"
+                        class="form-select">
+                    <option value="">-- Select a movie --</option>
+                </select>
+
+                <span asp-validation-for="MovieId"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="StartTime" class="form-label">
+                    Start Date and Time
+                </label>
+
+                <input asp-for="StartTime"
+                       type="datetime-local"
+                       class="form-control"
+                       min="@minDateTime"
+                       value="@defaultDateTime" />
+
+                <span asp-validation-for="StartTime"
+                      class="text-danger"></span>
+
+                <small class="text-muted">
+                    Showtime must be in the future.
+                </small>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="AvailableSeats" class="form-label">
+                    Available Seats
+                </label>
+
+                <input asp-for="AvailableSeats"
+                       type="number"
+                       min="1"
+                       max="500"
+                       class="form-control"
+                       value="100"
+                       placeholder="Enter available seats" />
+
+                <span asp-validation-for="AvailableSeats"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="submit"
+                        class="btn btn-warning flex-grow-1">
+                    Add Showtime
+                </button>
+
+                <a asp-controller="Showtimes"
+                   asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
     </div>
 </div>
 

@@ -1,0 +1,42 @@
+﻿.movie-form-container {
+    max-width: 650px;
+    margin: auto;
+    padding: 35px;
+    background: #1e293b;
+    border-radius: 16px;
+    color: white;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+}
+
+    .movie-form-container .form-label {
+        color: white;
+        font-weight: 600;
+    }
+
+    .movie-form-container .form-control,
+    .movie-form-container .form-select {
+        background-color: #0f172a;
+        color: white;
+        border: 1px solid #475569;
+        padding: 12px;
+    }
+
+        .movie-form-container .form-control:focus,
+        .movie-form-container .form-select:focus {
+            border-color: #fbbf24;
+            box-shadow: 0 0 0 0.2rem rgba(251,191,36,.2);
+        }
+
+        .movie-form-container .form-select option {
+            background: #0f172a;
+            color: white;
+        }
+
+    .movie-form-container .form-header h2 {
+        color: #fbbf24;
+        font-weight: bold;
+    }
+
+    .movie-form-container .form-header p {
+        color: #cbd5e1;
+    }

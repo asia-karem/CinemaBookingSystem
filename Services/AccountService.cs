@@ -1,5 +1,4 @@
-﻿
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace CinemaBookingSystem.Services
 {
@@ -20,12 +19,27 @@ namespace CinemaBookingSystem.Services
             string email,
             string password)
         {
+            email = email.Trim().ToLowerInvariant();
+
+            var existingUser = await _userManager.FindByEmailAsync(email);
+
+            if (existingUser != null)
+            {
+                return IdentityResult.Failed(
+                    new IdentityError
+                    {
+                        Description = "This email is already registered."
+                    }
+                );
+            }
+
             var user = new IdentityUser
             {
                 UserName = email,
                 Email = email
             };
 
+            // New registrations are regular users, not Admins.
             return await _userManager.CreateAsync(user, password);
         }
 
@@ -33,11 +47,19 @@ namespace CinemaBookingSystem.Services
             string email,
             string password)
         {
+            email = email.Trim();
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+                return false;
+
             var result = await _signInManager.PasswordSignInAsync(
-                email,
+                user,
                 password,
                 isPersistent: false,
-                lockoutOnFailure: true);
+                lockoutOnFailure: true
+            );
 
             return result.Succeeded;
         }
@@ -45,6 +67,11 @@ namespace CinemaBookingSystem.Services
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public Task RegisterAsync(string email, object password)
+        {
+            throw new NotImplementedException();
         }
     }
 }

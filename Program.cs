@@ -210,6 +210,9 @@ namespace CinemaBookingSystem
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -221,7 +224,6 @@ namespace CinemaBookingSystem
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-
             await app.RunAsync();
         }
     }

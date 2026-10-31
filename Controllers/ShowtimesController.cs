@@ -1,4 +1,4 @@
-﻿
+﻿```csharp
 using CinemaBookingSystem.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,7 +35,13 @@ namespace CinemaBookingSystem.Controllers
         {
             await LoadMovies();
 
-            return View(new MovieShowtime());
+            var showtime = new MovieShowtime
+            {
+                StartTime = DateTime.Now.AddHours(1),
+                AvailableSeats = 100
+            };
+
+            return View(showtime);
         }
 
         // POST: Showtimes/Create
@@ -97,7 +103,7 @@ namespace CinemaBookingSystem.Controllers
             }
         }
 
-        // Load movies into the dropdown.
+        // Load movies into dropdown
         private async Task LoadMovies(int? selectedMovie = null)
         {
             var movies = await _context.Movies
@@ -105,13 +111,13 @@ namespace CinemaBookingSystem.Controllers
                 .OrderBy(m => m.Name)
                 .ToListAsync();
 
-            ViewBag.NoMovies = !movies.Any();
-
-            ViewBag.Movies = new SelectList(
+            ViewBag.MovieId = new SelectList(
                 movies,
                 "Id",
                 "Name",
-                selectedMovie);
+                selectedMovie
+            );
         }
     }
 }
+```
