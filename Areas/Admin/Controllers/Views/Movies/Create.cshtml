@@ -1,0 +1,210 @@
+﻿@model CinemaBookingSystem.Models.Movie
+
+@{
+    ViewData["Title"] = "Add Movie";
+}
+
+<link rel="stylesheet" href="~/css/movie-create.css" asp-append-version="true" />
+
+<div class="container movie-create-page">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            <div class="movie-create-card">
+
+                <div class="movie-create-header">
+                    <h2>🎬 Add New Movie</h2>
+                    <p>Enter movie details and select your movie artwork.</p>
+                </div>
+
+                <div class="movie-create-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-4"></div>
+
+                        <h5 class="movie-section-title">Movie Information</h5>
+                        <p class="movie-section-description">
+                            Add the basic information about your movie.
+                        </p>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">Movie Name</label>
+                            <input asp-for="Name" class="form-control"
+                                   placeholder="Enter movie name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Des" class="form-label">Description</label>
+                            <textarea asp-for="Des" class="form-control"
+                                      rows="4"
+                                      placeholder="Write a short movie description"></textarea>
+                            <span asp-validation-for="Des" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Price" class="form-label">Ticket Price</label>
+                                <input asp-for="Price" type="number" min="0.01"
+                                       step="0.01" class="form-control"
+                                       placeholder="e.g. 150.00" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Status" class="form-label">Status</label>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                                <span asp-validation-for="Status" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DateTime" class="form-label">
+                                Release Date and Time
+                            </label>
+                            <input asp-for="DateTime" type="datetime-local"
+                                   class="form-control" />
+                            <span asp-validation-for="DateTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CategoryId" class="form-label">Category</label>
+                                <select asp-for="CategoryId"
+                                        asp-items="ViewBag.Categories"
+                                        class="form-select">
+                                    <option value="">-- Select Category --</option>
+                                </select>
+                                <span asp-validation-for="CategoryId" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="CinemaId" class="form-label">Cinema</label>
+                                <select asp-for="CinemaId"
+                                        asp-items="ViewBag.Cinemas"
+                                        class="form-select">
+                                    <option value="">-- Select Cinema --</option>
+                                </select>
+                                <span asp-validation-for="CinemaId" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr class="movie-section-divider" />
+
+                        <h5 class="movie-section-title">Movie Artwork</h5>
+                        <p class="movie-section-description">
+                            Select a main poster, then choose additional images.
+                        </p>
+
+                        @{
+                            var movieImages = ViewBag.MovieImages as List<string>
+                                ?? new List<string>();
+                        }
+
+                        @if (movieImages.Count == 0)
+                        {
+                            <div class="alert alert-warning">
+                                No images found. Add image files to
+                                <code>wwwroot/images/movies</code> and reload this page.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="mb-3">
+                                <label class="form-label">Choose Main Image</label>
+
+                                <select id="mainImagePath" name="mainImagePath"
+                                        class="form-select" required>
+                                    <option value="">-- Select Main Image --</option>
+                                    @foreach (string image in movieImages)
+                                    {
+                                        <option value="@image">
+                                            @System.IO.Path.GetFileName(image)
+                                        </option>
+                                    }
+                                </select>
+
+                                @Html.ValidationMessage("mainImagePath",
+                                    "", new { @class = "text-danger" })
+
+                                <img id="imagePreview" alt="Main image preview"
+                                     class="movie-image-preview" />
+                            </div>
+
+                            <div class="mt-4">
+                                <label class="form-label">Additional Images (Optional)</label>
+                                <p class="movie-section-description">
+                                    Select one or more images from the gallery.
+                                </p>
+
+                                
+                                <div class="movie-image-grid">
+                                    @foreach (var image in movieImages)
+                                    {
+                                        var fileName = System.IO.Path.GetFileNameWithoutExtension(image);
+                                        var movieName = fileName
+                                            .Replace(".jpg", "")
+                                            .Replace(".png", "")
+                                            .Replace("1", "")
+                                            .Replace("2", "")
+                                            .Replace("3", "")
+                                            .Replace("4", "");
+
+                                        <label class="movie-image-option">
+                                            <img src="@image" alt="@movieName" />
+
+                                            <span class="movie-image-name">
+                                                @movieName
+                                            </span>
+
+                                            <input type="checkbox"
+                                                   name="subImagePaths"
+                                                   value="@image" />
+                                        </label>
+                                    }
+                                </div>
+
+                            </div>
+                        }
+
+                        <hr class="movie-section-divider" />
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn movie-save-button">
+                                Save Movie
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-light movie-cancel-button">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        const imageSelect = document.getElementById("mainImagePath");
+        const preview = document.getElementById("imagePreview");
+
+        if (imageSelect && preview) {
+            imageSelect.addEventListener("change", function () {
+                if (this.value) {
+                    preview.src = this.value;
+                    preview.style.display = "block";
+                } else {
+                    preview.removeAttribute("src");
+                    preview.style.display = "none";
+                }
+            });
+        }
+    </script>
+}

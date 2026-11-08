@@ -3229,3 +3229,7 @@ body {
         grid-template-columns: 1fr;
     }
 }
+@model CinemaBookingSystem.ViewModels.DashboardViewModel @ {
+    ViewData ["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}

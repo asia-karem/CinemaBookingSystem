@@ -1,7 +1,4 @@
 ﻿namespace CinemaBookingSystem.Controllers
 {
-    internal class LoginViewModel
-    {
-        public string ReturnUrl { get; set; }
-    }
+    internal record LoginViewModel(string ReturnUrl);
 }

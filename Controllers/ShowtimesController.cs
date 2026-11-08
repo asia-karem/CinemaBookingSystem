@@ -1,4 +1,4 @@
-﻿```csharp
+﻿
 using CinemaBookingSystem.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -120,4 +120,3 @@ namespace CinemaBookingSystem.Controllers
         }
     }
 }
-```
